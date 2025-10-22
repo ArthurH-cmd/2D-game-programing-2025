@@ -1,11 +1,20 @@
 #include <XEngine.h>
 
+// 1
 X::TextureId imageID = 0;
 X::Math::Vector2 imagePosition = { 0.0f, 0.0f };
 float speedX = 500.0f;
 float speedY = 500.0f;
 float imageHeight = 10.0f;
 float imageWidth = 10.0f;
+
+// 2
+X::TextureId imageID2 = 0;
+X::Math::Vector2 imagePosition2 = { 0.0f, 0.0f };
+float speedX2 = 1000.0f;
+float speedY2 = 1000.0f;
+float imageHeight2 = 10.0f;
+float imageWidth2 = 10.0f;
 
 void GameInit()
 {
@@ -14,18 +23,25 @@ void GameInit()
 	imageHeight = X::GetSpriteHeight(imageID);
 	imagePosition.x = X::GetScreenWidth() * 0.5f;
 	imagePosition.y = X::GetScreenHeight() * 0.5f;
+
+	imageID2 = X::LoadTexture("bullet1.png");
+	imageWidth2 = X::GetSpriteWidth(imageID);
+	imageHeight2 = X::GetSpriteHeight(imageID);
+	imagePosition2.x = X::GetScreenWidth() * 0.5f;
+	imagePosition2.y = X::GetScreenHeight() * 0.5f;
+	
 }
 
 void GameRender()
 {
 	X::DrawSprite(imageID, imagePosition);
+	X::DrawSprite(imageID2, imagePosition2);
 }
 
 bool GameLoop(float deltaTime)
 {
-	
-	
-
+	imagePosition2.x += speedX2 * deltaTime;
+	imagePosition2.y += speedY2 * deltaTime;
 
 
 	imagePosition.x += speedX * deltaTime;
@@ -55,6 +71,31 @@ bool GameLoop(float deltaTime)
 		speedY = -speedY;
 	}
 
+	/////
+
+	if (imagePosition2.x - imageWidth2 <= 0.0f)
+	{
+		imagePosition2.x = imageWidth2;
+		speedX2 = -speedX2;
+	}
+	else if (imagePosition2.x + imageWidth2 >= X::GetScreenWidth())
+	{
+		imagePosition2.x = X::GetScreenWidth() - imageWidth2;
+		speedX2 = -speedX2;
+
+	}
+
+
+	if (imagePosition2.y - imageHeight2 <= 0.0f)
+	{
+		imagePosition2.y = imageHeight2;
+		speedY2 = -speedY2;
+	}
+	else if (imagePosition2.y + imageHeight2 >= X::GetScreenHeight())
+	{
+		imagePosition2.y = X::GetScreenHeight() - imageHeight2;
+		speedY2 = -speedY2;
+	}
 
 	GameRender();
 
@@ -76,88 +117,3 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	X::Stop();
 	return 0;
 }
-
-
-// place holder for my other code
-/*
-
-	while (true)
-	{
-		bool canMoveY = true;
-		bool canMoveX = true;
-
-		if (imagePosition.y == ScreenY || imagePosition.y == 0.0)
-		{
-			canMoveY = false;
-		}
-		else if (imagePosition.x == ScreenX || imagePosition.x == 0.0)
-		{
-			canMoveX = false;
-		}
-
-		// walls "X"
-		if (imagePosition.x < ScreenX || imagePosition.x < 0.0)
-		{
-			// walking around
-
-			if (X::IsKeyDown(X::Keys::A))
-			{
-				imagePosition.x -= moveSpeed * deltaTime;
-			}
-
-			else if (X::IsKeyDown(X::Keys::D))
-			{
-				imagePosition.x += moveSpeed * deltaTime;
-			}
-
-		}
-		else // walking into walls
-		{
-			if (imagePosition.x > ScreenX)
-			{
-				imagePosition.x -= moveSpeed * deltaTime;
-			}
-
-			if (imagePosition.x < ScreenX/ScreenX)
-			{
-				imagePosition.x += moveSpeed * deltaTime;
-			}
-		}
-
-		// walls "Y"
-		if (imagePosition.y < ScreenY || imagePosition.y < 0.0)
-		{
-			// walking around
-			if (X::IsKeyDown(X::Keys::W))
-			{
-				imagePosition.y -= moveSpeed * deltaTime;
-			}
-			else if (X::IsKeyDown(X::Keys::S))
-			{
-				imagePosition.y += moveSpeed * deltaTime;
-			}
-		}
-		else // walking into walls
-		{
-			if (imagePosition.y > ScreenY)
-			{
-				imagePosition.y -= moveSpeed * deltaTime;
-			}
-
-		}
-
-		// rotating
-		if (X::IsKeyPressed(X::Keys::LEFT))
-		{
-			imageRotation += RotationSpeed;
-		}
-
-		if (X::IsKeyPressed(X::Keys::RIGHT))
-		{
-			imageRotation -= RotationSpeed;
-		}
-
-
-
-
-*/
